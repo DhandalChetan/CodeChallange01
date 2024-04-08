@@ -32,3 +32,16 @@ Banana    1            $0.99
 
 Total price : $19.02
 You saved $3.45 today.
+
+
+
+///----------
+Execution  Steps
+ 
+1. Install Node.js.
+2. Download the project files.
+3. Open a terminal and navigate to the project directory.
+4. Run node app.js.
+5. Input purchased items separated by commas.
+6. View the total price and savings.
+7. Close the terminal when done.
