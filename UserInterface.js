@@ -10,21 +10,6 @@ class UserInterface {
         this.priceTable = priceTable;
     }
 
-    promptInput() {
-        this.rl.question('Please enter all the items purchased separated by a comma: ', (input) => {
-            const items = input.split(',').map(item => item.trim());
-
-            // Validate items
-            const invalidItems = this.validateItems(items);
-            if (invalidItems.length > 0) {
-                console.log('Invalid items: ' + invalidItems.join(', '));
-                this.rl.close();
-                return;
-            }
-            this.purchaseManager.processPurchase(input);
-            this.rl.close();
-        });
-    }
 
     validateItems(items) {
         const invalidItems = [];
@@ -34,6 +19,33 @@ class UserInterface {
             }
         });
         return invalidItems;
+    }
+
+    promptInput() {
+        this.rl.question('Please enter all the items purchased separated by a comma: ', (input) => {
+            // Validate items
+            const items = input.split(',').map(item => item.trim());
+            const invalidItems = this.validateItems(items);
+            if (invalidItems.length > 0) {
+                console.log('Invalid items: ' + invalidItems.join(', '));
+                this.rl.close();
+                return;
+            }
+
+            const { purchaseDetails, totalPrice, savedAmount } = this.purchaseManager.processPurchase(input);
+            this.displayReceipt(purchaseDetails, totalPrice, savedAmount);
+            this.rl.close();
+        });
+    }
+
+    displayReceipt(purchaseDetails, totalPrice, savedAmount) {
+        console.log('\nItem     Quantity      Price');
+        console.log('--------------------------------------');
+        purchaseDetails.forEach(({ item, quantity, price }) => {
+            console.log(`${item}      ${quantity}            $${price.toFixed(2)}`);
+        });
+        console.log('\nTotal price : $' + totalPrice.toFixed(2));
+        console.log(`You saved $${savedAmount.toFixed(2)} today.`);
     }
 }
 

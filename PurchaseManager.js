@@ -11,22 +11,20 @@ class PurchaseManager {
             itemCount[item] = (itemCount[item] || 0) + 1;
         });
 
-        let totalPrice = 0;
-
-        console.log('\nItem     Quantity      Price');
-        console.log('--------------------------------------');
+        const purchaseDetails = [];
 
         Object.keys(itemCount).forEach(item => {
             const quantity = itemCount[item];
             const price = this.calculatePrice(item, quantity);
-            console.log(`${item}      ${quantity}            $${price.toFixed(2)}`);
-            totalPrice += price;
+            purchaseDetails.push({ item, quantity, price });
         });
 
-        console.log('\nTotal price : $' + totalPrice.toFixed(2));
+        const totalPrice = purchaseDetails.reduce((acc, curr) => acc + curr.price, 0);
         const savedAmount = this.calculateSavedAmount(items);
-        console.log(`You saved $${savedAmount.toFixed(2)} today.`);
+
+        return { purchaseDetails, totalPrice, savedAmount };
     }
+   
 
     calculatePrice(item, quantity) {
         const { unitPrice, salePrice } = this.priceTable.getItemInfo(item);
